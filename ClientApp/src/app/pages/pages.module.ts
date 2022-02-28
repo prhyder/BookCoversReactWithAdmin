@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { NbMenuModule } from '@nebular/theme';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { ThemeModule } from '../@theme/theme.module';
 import { PagesComponent } from './pages.component';
@@ -14,6 +15,7 @@ import { GenresComponent } from './genres/genres.component';
     PagesRoutingModule,
     ThemeModule,
     NbMenuModule,
+    Ng2SmartTableModule,
     DashboardModule,
   ],
   declarations: [

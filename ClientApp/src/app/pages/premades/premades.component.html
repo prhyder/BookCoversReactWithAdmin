@@ -1,1 +1,48 @@
-<p>premades works!</p>
+<h1 id="tableLabel">Premades</h1>
+
+<p *ngIf="!premades"><em>Loading...</em></p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="premades">
+  <thead>
+    <tr>
+      <th>PremadeId</th>
+      <th>BookCoverId</th>
+      <th>Title</th>
+      <th>AuthorName</th>
+      <th>ThumbnailUrl</th>
+      <th>ImageUrl</th>
+      <th>PortfolioOrder</th>
+      <th>ShowInPortfolio</th>
+      <th>GenreId</th>
+      <th>Code</th>
+      <th>Price</th>
+      <th>Sold</th>
+      <th>Display In Store</th>
+      <th>Premade Screen Order</th>
+      <th>Date Added</th>
+      <th>Purchase Date</th>
+      <th>SeriesId</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let premade of premades">
+      <td>{{ premade.premadeId }}</td>
+      <td>{{ premade.bookCoverId }}</td>
+      <td>{{ premade.bookCover.title }}</td>
+      <td>{{ premade.bookCover.authorName }}</td>
+      <td>{{ premade.bookCover.thumbnailUrl }}</td>
+      <td>{{ premade.bookCover.imageUrl }}</td>
+      <td>{{ premade.bookCover.portfolioOrder }}</td>
+      <td>{{ premade.bookCover.showInPortfolio }}</td>
+      <td>{{ premade.bookCover.genreId }}</td>
+      <td>{{ premade.code }}</td>
+      <td>{{ premade.price }}</td>
+      <td>{{ premade.sold }}</td>
+      <td>{{ premade.displayInStore }}</td>
+      <td>{{ premade.premadeOrder }}</td>
+      <td>{{ premade.dateAdded }}</td>
+      <td>{{ premade.purchaseDate }}</td>
+      <td>{{ premade.seriesId }}</td>
+    </tr>
+  </tbody>
+</table>

@@ -2,7 +2,7 @@
 
 <p *ngIf="!genres"><em>Loading...</em></p>
 
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="genres">
+<!--<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="genres">
   <thead>
     <tr>
       <th>GenreId</th>
@@ -15,4 +15,13 @@
       <td>{{ genre.name }}</td>
     </tr>
   </tbody>
-</table>
+</table>-->
+
+<!--<nb-card-body>
+
+</nb-card-body>-->
+
+<ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)"
+                 (editConfirm)="onSaveConfirm($event)" (createConfirm)="onCreateConfirm($event)">
+
+</ng2-smart-table>

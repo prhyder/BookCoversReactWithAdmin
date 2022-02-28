@@ -14,6 +14,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BookCoverService } from './services/book-cover.service';
 import { PremadeService } from './services/premade.service';
 import { GenreService } from './services/genre.service';
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 import {
   NbChatModule,
   NbDatepickerModule,
@@ -31,6 +32,7 @@ import {
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
+    Ng2SmartTableModule,
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
     NbDatepickerModule.forRoot(),
