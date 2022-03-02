@@ -19,7 +19,7 @@ namespace BookCoversApi.Context
             _connectionString = _configuration.GetConnectionString("SqlConnection");
         }
 
-        public IDbConnection CreateConnection() => new SqlConnection(_connectionString);
+        public SqlConnection CreateConnection() => new SqlConnection(_connectionString);
 
     }
 }

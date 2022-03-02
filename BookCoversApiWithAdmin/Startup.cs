@@ -1,9 +1,12 @@
 using BookCoversApi.Context;
 using BookCoversApi.Interfaces;
 using BookCoversApi.Repository;
+using BookCoversApiWithAdmin.Data;
+using BookCoversApiWithAdmin.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +31,11 @@ namespace BookCoversApiWithAdmin
             services.AddScoped<IPremadeRepository, PremadeRepository>();
             services.AddScoped<IGenreRepository, GenreRepository>();
             services.AddScoped<ISeriesRepository, SeriesRepository>();
+
+            services.AddTransient<IUserStore<ApplicationUser>, UserStore>();
+            services.AddTransient<IRoleStore<ApplicationRole>, RoleStore>();
+            services.AddIdentity<ApplicationUser, ApplicationRole>().AddDefaultTokenProviders();
+
             services.AddControllers();
 
             services.AddControllersWithViews();
