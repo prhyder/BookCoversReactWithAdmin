@@ -9,6 +9,8 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
+import { JwtModule } from '@auth0/angular-jwt';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BookCoverService } from './services/book-cover.service';
@@ -24,6 +26,14 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
+
+export function tokenGetter() {
+  var tokenLS = localStorage.getItem("auth_app_token");
+  if (tokenLS) {
+    return JSON.parse(tokenLS).value;
+  }
+  return "";
+}
 
 @NgModule({
   declarations: [AppComponent],
@@ -44,6 +54,13 @@ import {
     }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ["localhost:5235", "localhost:44306"],
+        disallowedRoutes: []
+      }
+    })
   ],
   providers: [
     BookCoverService,

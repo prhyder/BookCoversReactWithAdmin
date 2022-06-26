@@ -78,11 +78,6 @@ export class GenresComponent implements OnInit {
 
   ngOnInit(): void {
     this.getGenres();
-    //this.genreService.getGenres()
-    //  .subscribe((data: any[]) => {
-    //    this.genres = data;
-    //    this.source.load(data);
-    //}, error => console.log("HTTP Error: " + error))
   }
 
 }

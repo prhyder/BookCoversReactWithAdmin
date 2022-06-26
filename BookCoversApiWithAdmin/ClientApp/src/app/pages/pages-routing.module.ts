@@ -6,6 +6,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { BookCoversComponent } from './book-covers/book-covers.component';
 import { PremadesComponent } from './premades/premades.component';
 import { GenresComponent } from './genres/genres.component';
+import { AuthGuard } from '../shared/guards/auth.guard';
 
 const routes: Routes = [{
   path: '',
@@ -31,6 +32,7 @@ const routes: Routes = [{
     {
       path: 'genres',
       component: GenresComponent,
+      canActivate: [AuthGuard]
     },
   ],
 }];

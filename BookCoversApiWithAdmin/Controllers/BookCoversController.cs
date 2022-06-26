@@ -7,10 +7,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BookCoversApi.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookCoversApi.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [ApiController]
     public class BookCoversController : ControllerBase
     {

@@ -1,6 +1,6 @@
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NbAuthModule, NbDummyAuthStrategy } from '@nebular/auth';
+import { NbAuthJWTToken, NbAuthModule, NbDummyAuthStrategy, NbPasswordAuthStrategy } from '@nebular/auth';
 import { NbSecurityModule, NbRoleProvider } from '@nebular/security';
 import { of as observableOf } from 'rxjs';
 
@@ -12,17 +12,17 @@ import { MockDataModule } from './mock/mock-data.module';
 
 const socialLinks = [
   {
-    url: 'https://github.com/akveo/nebular',
+    url: '',
     target: '_blank',
     icon: 'github',
   },
   {
-    url: 'https://www.facebook.com/akveo/',
+    url: '',
     target: '_blank',
     icon: 'facebook',
   },
   {
-    url: 'https://twitter.com/akveo_inc',
+    url: '',
     target: '_blank',
     icon: 'twitter',
   },
@@ -45,14 +45,45 @@ export const NB_CORE_PROVIDERS = [
   ...NbAuthModule.forRoot({
 
     strategies: [
-      NbDummyAuthStrategy.setup({
+      NbPasswordAuthStrategy.setup({
         name: 'email',
-        delay: 3000,
+        token: {
+          class: NbAuthJWTToken,
+          key: 'token',
+        },
+
+        baseEndpoint: '',
+        login: {
+          // ...
+          endpoint: '/api/accounts/login',
+          method: 'post',
+        },
+        register: {
+          // ...
+          endpoint: '/api/accounts/registration',
+          method: 'post',
+        },
+        logout: {
+          endpoint: '/auth/sign-out',
+          method: 'post',
+        },
+        requestPass: {
+          endpoint: '/auth/request-pass',
+          method: 'post',
+        },
+        resetPass: {
+          endpoint: '/auth/reset-pass',
+          method: 'post',
+        },
       }),
+      //NbDummyAuthStrategy.setup({
+      //  name: 'email',
+      //  delay: 3000,
+      //}),
     ],
     forms: {
       login: {
-        socialLinks: socialLinks,
+        //socialLinks: socialLinks,
       },
       register: {
         socialLinks: socialLinks,
