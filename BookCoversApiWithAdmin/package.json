@@ -1,0 +1,15 @@
+{
+  "name": "bookcoversapiwithadmin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "startfullstack": "concurrently \"dotnet watch run\" \"cd react-admin && npm run dev\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^7.2.2"
+  }
+}

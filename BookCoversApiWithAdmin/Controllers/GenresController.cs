@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace BookCoversApi.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     [ApiController]
     public class GenresController : ControllerBase
     {
@@ -81,18 +81,18 @@ namespace BookCoversApi.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateGenre(int id, GenreDTO genreDto)
+        [HttpPut]
+        public async Task<IActionResult> UpdateGenre(GenreDTO genreDto)
         {
             try
             {
-                var dbGenre = await _genreRepository.GetById(id);
+                var dbGenre = await _genreRepository.GetById(genreDto.GenreId);
                 if (dbGenre == null)
                 {
                     return NotFound();
                 }
 
-                await _genreRepository.Update(id, genreDto);
+                await _genreRepository.Update(genreDto.GenreId, genreDto);
                 return NoContent();
             }
             catch (Exception ex)
