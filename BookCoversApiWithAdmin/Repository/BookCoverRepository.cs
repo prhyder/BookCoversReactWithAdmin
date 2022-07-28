@@ -79,7 +79,7 @@ namespace BookCoversApi.Repository
             }
         }
 
-        public async Task Update(int id, BookCoverDTO bookCover)
+        public async Task Update(BookCoverDTO bookCover)
         {
             var query = "UPDATE dbo.BookCover " +
                 "SET Title = @Title, " +
@@ -92,7 +92,7 @@ namespace BookCoversApi.Repository
                 "WHERE BookCoverId = @BookCoverId";
 
             var parameters = new DynamicParameters();
-            parameters.Add("BookCoverId", id, DbType.Int32);
+            parameters.Add("BookCoverId", bookCover.BookCoverId, DbType.Int32);
             parameters.Add("Title", bookCover.Title, DbType.String);
             parameters.Add("AuthorName", bookCover.AuthorName, DbType.String);
             parameters.Add("ThumbnailUrl", bookCover.ThumbnailUrl, DbType.String);

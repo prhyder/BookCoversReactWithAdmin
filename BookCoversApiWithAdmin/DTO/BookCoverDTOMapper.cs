@@ -19,7 +19,8 @@ namespace BookCoversApi.DTO
                 ImageUrl = bookCover.ImageUrl,
                 PortfolioOrder = bookCover.PortfolioOrder,
                 ShowInPortfolio = bookCover.ShowInPortfolio,
-                GenreId = bookCover.GenreId
+                GenreId = bookCover.GenreId,
+                GenreName = bookCover.Genre == null ? string.Empty : bookCover.Genre.Name
             };
         }
 

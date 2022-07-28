@@ -1,0 +1,53 @@
+@import 'tokens.scss';
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: $dark-primary-color;
+  text-decoration: none;
+  &:hover,
+  &:focus,
+  &:active {
+   text-decoration: underline;
+ }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.error-text{
+	color: $error-red;
+	font-size: smaller;
+}
+
+.add-button {
+	margin-bottom: 16px;
+}
+
+#select-book-image #selected-image{
+	visibility: collapse;
+	height: 0px;
+  }
+  
+  #select-book-image 
+  {
+	.MuiTypography-root{
+		margin-top: -12px;
+		margin-bottom: 12px;
+	  }
+  }
+
+  label{
+	color: $dark-primary-color;
+  }
+
+ .MuiInputLabel-root.MuiInputLabel-formControl{
+	color: $dark-primary-color;
+  }

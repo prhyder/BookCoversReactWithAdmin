@@ -4,19 +4,22 @@ import axios from 'axios';
 import { TextField, FormGroup, Button } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Link from 'next/link';
+import ButtonWithLoadingIndicator from '../ButtonWithLoadingIndicator';
+import BackButtonLink from '../BackButtonLink';
 import { useFormik } from 'formik';
+import { apiUrl } from '../../../config.js';
 import * as yup from 'yup';
 
-const API_URL = 'https://localhost:5001/api/genres/';
+const API_URL = `${apiUrl}/genres/`;
 
 const AddEditGenre = (props) => {
 	const router = useRouter();
 	const genreId = props.id;
 	const isAddMode = !genreId;
-	var showError = false;
 
 	const [errorText, setErrorText] = useState('');
 	const [genre, setGenre] = useState([]);
+	const [formSubmitted, setFormSubmitted] = useState(false);
 
 	const getGenreById = async () => {
 		try {
@@ -51,6 +54,8 @@ const AddEditGenre = (props) => {
 		enableReinitialize: true,
 		validationSchema: validationSchema,
 		onSubmit: values => {
+			setFormSubmitted(true);
+
 			if (isAddMode) {
 				axios.post(API_URL, values)
 					.then((response) => {
@@ -80,27 +85,9 @@ const AddEditGenre = (props) => {
 		width: "300px",
 	}
 
-	const linkStyle = {
-		textAlign: "center",
-		lineHeight: "24px",
-		verticalAlign: "middle",
-	}
-
-	const arrowStyle = {
-		marginTop: "2px",
-		marginBottom: "-2px",
-	}
-
-	const errorStyle = {
-		color: "red",
-		fontSize: "smaller",
-	}
-
 	return (
 		<>
-			<Link href='/genres' value="Back to Genres" >
-				<a style={linkStyle}><ArrowBackIcon fontSize="medium" style={arrowStyle} sx={{ paddingTop: 1 }} /> Back to Genres</a>
-			</Link>
+			<BackButtonLink text='Back to Genres' url='/genres' />
 			<form onSubmit={formik.handleSubmit}>
 				<FormGroup>
 					<h1>{isAddMode ? 'Add Genre' : 'Edit Genre'}</h1>
@@ -123,16 +110,14 @@ const AddEditGenre = (props) => {
 					/>
 				</FormGroup>
 
-				<Button
+				<ButtonWithLoadingIndicator
 					type="submit"
-					variant="contained"
-					color="secondary"
-					sx={{ marginTop: 1 }}>
-					Submit
-				</Button>
+					sx={{ marginTop: 1 }}
+					text={"Submit"}
+					showLoadingIndicator={formSubmitted}
+				/>
 			</form>
-			{showError && <p id="error-text" style={errorStyle}></p>}
-			<p style={errorStyle}>{errorText}</p>
+			<p className='error-text'>{errorText}</p>
 		</>
 	)
 }

@@ -12,7 +12,7 @@ namespace BookCoversApi.Interfaces
         public Task<IList<Genre>> GetGenres();
         public Task<Genre> GetById(int id);
         public Task<Genre> Add(GenreDTO genre);
-        public Task Update(int id, GenreDTO genre);
+        public Task Update(GenreDTO genre);
         public Task Delete(int id);
     }
 }

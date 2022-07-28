@@ -12,7 +12,7 @@ namespace BookCoversApi.Interfaces
         public Task<IList<Premade>> GetPremades();
         public Task<Premade> GetById(int id);
         public Task<Premade> Add(PremadeDTO premade);
-        public Task Update(int id, PremadeDTO premade);
+        public Task Update(PremadeDTO premade);
         public Task Delete(int id);
         public Task UpdateOrder(int premadeId, int order, IList<PremadeDTO> premades);
     }

@@ -25,10 +25,11 @@ const drawerWidth = 240;
 
 const navItem1 = { displayName: 'Book Covers', path: '/bookCovers', icon: BookIcon };
 const navItem2 = { displayName: 'Genres', path: '/genres', icon: DescriptionIcon };
-const navItem3 = { displayName: 'Premades', path: '/premades', icon: AppShortcutIcon };
+// Commenting out Premades for now.
+//const navItem3 = { displayName: 'Premades', path: '/premades', icon: AppShortcutIcon };
 
 const navigationItems = [
-	navItem1, navItem2, navItem3
+	navItem1, navItem2
 ];
 
 const Layout = ({ children }) => {
@@ -102,7 +103,7 @@ const Layout = ({ children }) => {
 						<MenuIcon />
 					</IconButton>
 					<Typography variant="h6" noWrap component="div">
-						Admin
+						<Link href='/'>Admin</Link>
 					</Typography>
 				</Toolbar>
 			</AppBar>

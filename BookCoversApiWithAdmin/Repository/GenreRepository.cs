@@ -63,12 +63,12 @@ namespace BookCoversApi.Repository
             }
         }
 
-        public async Task Update(int id, GenreDTO genre)
+        public async Task Update(GenreDTO genre)
         {
             var query = "UPDATE dbo.Genre SET Name = @Name WHERE GenreId = @GenreId";
 
             var parameters = new DynamicParameters();
-            parameters.Add("GenreId", id, DbType.Int32);
+            parameters.Add("GenreId", genre.GenreId, DbType.Int32);
             parameters.Add("Name", genre.Name, DbType.String);
 
             using (var connection = _context.CreateConnection())

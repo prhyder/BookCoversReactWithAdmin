@@ -92,7 +92,7 @@ namespace BookCoversApi.Controllers
                     return NotFound();
                 }
 
-                await _genreRepository.Update(genreDto.GenreId, genreDto);
+                await _genreRepository.Update(genreDto);
                 return NoContent();
             }
             catch (Exception ex)

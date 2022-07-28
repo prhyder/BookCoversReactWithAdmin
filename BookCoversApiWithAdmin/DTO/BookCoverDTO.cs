@@ -15,6 +15,7 @@ namespace BookCoversApi.DTO
         public int? PortfolioOrder { get; set; }
         public bool ShowInPortfolio { get; set; }
         public int? GenreId { get; set; }
-        public GenreDTO Genre { get; set; }
+        public GenreDTO? Genre { get; set; }
+        public string GenreName { get; set; }
     }
 }

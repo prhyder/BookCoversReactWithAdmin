@@ -17,10 +17,12 @@ namespace BookCoversApi.Controllers
     public class BookCoversController : ControllerBase
     {
         private readonly IBookCoverRepository _bookCoverRepository;
+        private readonly IGenreRepository _genreRepository;
 
-        public BookCoversController(IBookCoverRepository bookCoverRepository)
+        public BookCoversController(IBookCoverRepository bookCoverRepository, IGenreRepository genreRepository)
         {
             _bookCoverRepository = bookCoverRepository;
+            _genreRepository = genreRepository;
         }
 
         [HttpGet]
@@ -29,6 +31,11 @@ namespace BookCoversApi.Controllers
             try
             {
                 var bookCovers = await _bookCoverRepository.GetBookCovers();
+                var genres = await _genreRepository.GetGenres();
+                foreach(BookCover bookCover in bookCovers)
+                {
+                    bookCover.Genre = bookCover.GenreId == null ? null : new Genre { GenreId = (int)bookCover.GenreId, Name = genres.FirstOrDefault(x => x.GenreId == bookCover.GenreId).Name };
+                }
                 var bookCoverResult = bookCovers.ConvertToDTO();
 
                 return Ok(bookCoverResult);
@@ -82,18 +89,18 @@ namespace BookCoversApi.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBookCover(int id, BookCoverDTO bookCoverDto)
+        [HttpPut]
+        public async Task<IActionResult> UpdateBookCover(BookCoverDTO bookCoverDto)
         {
             try
             {
-                var dbBookCover = await _bookCoverRepository.GetById(id);
+                var dbBookCover = await _bookCoverRepository.GetById(bookCoverDto.BookCoverId);
                 if (dbBookCover == null)
                 {
                     return NotFound();
                 }
 
-                await _bookCoverRepository.Update(id, bookCoverDto);
+                await _bookCoverRepository.Update(bookCoverDto);
                 return NoContent();
             }
             catch (Exception ex)

@@ -81,18 +81,18 @@ namespace BookCoversApi.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePremade(int id, PremadeDTO premadeDto)
+        [HttpPut]
+        public async Task<IActionResult> UpdatePremade(PremadeDTO premadeDto)
         {
             try
             {
-                var dbPremade = await _premadeRepository.GetById(id);
+                var dbPremade = await _premadeRepository.GetById(premadeDto.PremadeId);
                 if (dbPremade == null)
                 {
                     return NotFound();
                 }
 
-                await _premadeRepository.Update(id, premadeDto);
+                await _premadeRepository.Update(premadeDto);
                 return NoContent();
             }
             catch (Exception ex)

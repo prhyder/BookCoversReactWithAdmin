@@ -119,7 +119,7 @@ namespace BookCoversApi.Repository
             }
         }   
 
-        public async Task Update(int id, PremadeDTO premadeDto)
+        public async Task Update(PremadeDTO premadeDto)
         {
             using (var connection = _context.CreateConnection())
             {
@@ -140,7 +140,7 @@ namespace BookCoversApi.Repository
                     "WHERE PremadeId = @PremadeId";
 
                     var parametersP = new DynamicParameters();
-                    parametersP.Add("PremadeId", id, DbType.Int32);
+                    parametersP.Add("PremadeId", premadeDto.PremadeId, DbType.Int32);
                     parametersP.Add("BookCoverId", premadeDto.BookCoverId, DbType.Int32);
                     parametersP.Add("Code", premadeDto.Code, DbType.String);
                     parametersP.Add("Price", premadeDto.Price, DbType.Decimal);
