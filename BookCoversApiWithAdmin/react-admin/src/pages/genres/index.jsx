@@ -1,10 +1,8 @@
 import React, {useState, useEffect } from 'react';
 import axios from 'axios';
-import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
-import { DataGrid } from '@mui/x-data-grid';
-import { Button } from '@mui/material';
 import Link from 'next/link';
+import Spinner from '../../components/Spinner';
+import GenreItem from '../../components/genres/GenreItem';
 import { apiUrl } from '../../../config.js';
 import { useRouter } from 'next/router';
 
@@ -33,70 +31,33 @@ const Genres = () => {
 		})();
 	}, []);
 
-	const handleEdit = (event, cellValues) => {
-		const genreId = cellValues.row.genreId;
+	const handleEdit = (event) => {
+		const genreId = event.target.value;
 		router.push('/genres/edit/' + genreId);
 	};
 	
-	const handleDelete = (event, cellValues) => {
-		const genreId = cellValues.row.genreId;
-		const genreName = cellValues.row.name;
+	const handleDelete = (event) => {
+		const genreId = event.target.value;
+		const genreName = event.target.getAttribute("data-name");
 		if (confirm("Are you sure you want to delete the genre " + genreName + "?") == true) {
 			axios.delete(API_URL + genreId )
-			.then(response => {
+			.then(() => {
 				setDeleteSuccessful(true);
-				setGenres(genres => genres.filter(x => x.genreId !== genreId));
+				setGenres(genres => genres.filter(x => x.genreId != genreId));
 			}).catch(error => {
 				console.log(error);
 		})
 		}
 	};
-
-	const columns = [
-		{ field: 'genreId', headerName: 'ID', width: 90 },
-		{ field: 'name', headerName: 'Name', width: 180 },
-		{
-			field: "EditDelete",
-			flex: 1,
-			sortable: false,
-			headerName: '',
-			renderCell: (cellValues) => {
-				return (
-					<>
-						<Button
-							variant="contained"
-							color="secondary"
-							size="small"
-							sx={{margin:1}}
-							onClick={(event) => {
-								handleEdit(event, cellValues);
-							}}
-						>
-							Edit
-						</Button>
-						<Button
-							variant="contained"
-							color="secondary"
-							size="small"
-							sx={{marginTop:1, marginBottom:1}}
-							onClick={(event) => {
-								handleDelete(event, cellValues);
-							}}
-						>
-							Delete
-						</Button>
-					</>
-			  );
-			}
-		  },
-	]
 	
 	return (
-		<>
+		<div className='pageRoot'>
 			<h1>Genres</h1>
 			<div>
 				<Link href='/genres/add' >
-					<Button variant="contained" color="secondary" className="add-button">Add New Genre</Button>
+					<button type="button" className="btn btn-dark d-inline mb-3 mt-2">
+						Add New Genre
+					</button>
 				</Link>
 			</div>
 			<div>
@@ -104,22 +65,25 @@ const Genres = () => {
 			</div>
 
 			{genres.length == 0
-				? < CircularProgress color="secondary" />
-				: <Box sx={{ height: 600, width: 800 }}>
-					<DataGrid
-						rows={genres}
-						columns={columns}
-						getRowId={row => row.genreId}
-						disableSelectionOnClick 
-						initialState={{
-							sorting: {
-								sortModel: [{ field: 'genreId', sort: 'desc' }],
-							},
-						}}
-					/>
-				</Box>
+				? <Spinner />
+				: <div className="table-responsive me-5 mb-4">
+					<table className="table table-striped table-hover">
+						<thead>
+							<tr>
+								<th scope="col">ID</th>
+								<th scope="col">Name</th>
+								<th scope="col"></th>
+							</tr>
+						</thead>
+						<tbody>
+							{genres.map((genre) => (
+								<GenreItem key={genre.genreId} genre={genre} onClickEdit={handleEdit} onClickDelete={handleDelete} />
+							))}
+						</tbody>
+					</table>
+				</div>
 			}
-		</>
+		</div>
 	);
 }
 

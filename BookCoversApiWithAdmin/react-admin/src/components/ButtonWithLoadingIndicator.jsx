@@ -1,19 +1,29 @@
 import React from 'react';
-import { Button } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
+
+const Spinner = () => {
+	const spinnerStyle = {
+		width: "1.5rem",
+		height: "1.5rem"
+	};
+
+	return (
+		<div className="spinner-border ms-2 spinner-border-sm" style={ spinnerStyle } role="status">
+			<span className="visually-hidden">Loading...</span>
+		</div>
+	);
+}
 
 const ButtonWithLoadingIndicator = (props) => {
 	const { text, showLoadingIndicator, ...rest } = props;
 
 	return (
-		<Button
-			variant="contained"
-			color="secondary"
-			{...rest}
-		>
+		<button type="button" className="btn btn-primary align-middle " {...rest}>
+			<span className="d-flex">
 			{text}
-			{ showLoadingIndicator && <CircularProgress size={20} sx={{marginLeft: 1}} /> }
-		</Button>
+			{ showLoadingIndicator && <Spinner />}
+			</span>
+			
+		</button>
 	);
 }
 

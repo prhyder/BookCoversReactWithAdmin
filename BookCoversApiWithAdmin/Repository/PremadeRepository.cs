@@ -22,7 +22,7 @@ namespace BookCoversApi.Repository
 
         public async Task<IList<Premade>> GetPremades()
         {
-            var query = "SELECT * FROM dbo.Premade p LEFT JOIN dbo.BookCover b ON p.BookCoverId = b.BookCoverId";
+            var query = "SELECT * FROM premade p LEFT JOIN bookCover b ON p.bookCoverId = b.bookCoverId";
 
             using (var connection = _context.CreateConnection())
             {
@@ -46,7 +46,7 @@ namespace BookCoversApi.Repository
 
         public async Task<Premade> GetById(int id)
         {
-            var query = "SELECT * FROM dbo.Premade WHERE PremadeId = @id";
+            var query = "SELECT * FROM premade WHERE premadeId = @id";
 
             using (var connection = _context.CreateConnection())
             {
@@ -63,38 +63,38 @@ namespace BookCoversApi.Repository
 
                 using (var transaction = connection.BeginTransaction())
                 {
-                    var queryBookCover = "INSERT INTO dbo.BookCover " +
-                    "(Title, AuthorName, ThumbnailUrl, ImageUrl, PortfolioOrder, ShowInPortfolio, GenreId) " +
-                    "VALUES (@Title, @AuthorName, @ThumbnailUrl, @ImageUrl, @PortfolioOrder, @ShowInPortfolio, @GenreId);" +
-                    "SELECT CAST(SCOPE_IDENTITY() as int)";
+                    var queryBookCover = "INSERT INTO dbo.bookCover " +
+                    "(title, authorName, thumbnailUrl, imageUrl, portfolioOrder, showInPortfolio, genreId) " +
+                    "VALUES (@title, @authorName, @thumbnailUrl, @imageUrl, @portfolioOrder, @showInPortfolio, @genreId);" +
+                    "SELECT LAST_INSERT_ID()";
 
                     var parametersBC = new DynamicParameters();
-                    parametersBC.Add("Title", premadeDto.BookCover.Title, DbType.String);
-                    parametersBC.Add("AuthorName", premadeDto.BookCover.AuthorName, DbType.String);
-                    parametersBC.Add("ThumbnailUrl", premadeDto.BookCover.ThumbnailUrl, DbType.String);
-                    parametersBC.Add("ImageUrl", premadeDto.BookCover.ImageUrl, DbType.String);
-                    parametersBC.Add("PortfolioOrder", premadeDto.BookCover.PortfolioOrder, DbType.Int32);
-                    parametersBC.Add("ShowInPortfolio", premadeDto.BookCover.ShowInPortfolio, DbType.Boolean);
-                    parametersBC.Add("GenreId", premadeDto.BookCover.GenreId, DbType.Int32);
+                    parametersBC.Add("title", premadeDto.BookCover.Title, DbType.String);
+                    parametersBC.Add("authorName", premadeDto.BookCover.AuthorName, DbType.String);
+                    parametersBC.Add("thumbnailUrl", premadeDto.BookCover.ThumbnailUrl, DbType.String);
+                    parametersBC.Add("imageUrl", premadeDto.BookCover.ImageUrl, DbType.String);
+                    parametersBC.Add("portfolioOrder", premadeDto.BookCover.PortfolioOrder, DbType.Int32);
+                    parametersBC.Add("showInPortfolio", premadeDto.BookCover.ShowInPortfolio, DbType.Boolean);
+                    parametersBC.Add("genreId", premadeDto.BookCover.GenreId, DbType.Int32);
 
                     var result = await connection.QueryAsync<int>(queryBookCover, parametersBC, transaction: transaction);
                     int bookCoverId = result.Single();
 
-                    var queryPremade = "INSERT INTO dbo.Premade " +
-                    "(BookCoverId, Code, Price, Sold, DisplayInStore, PremadeOrder, DateAdded, PurchaseDate, SeriesId)" +
-                    "VALUES (@BookCoverId, @Code, @Price, @Sold, @DisplayInStore, @PremadeOrder, GETDATE(), @PurchaseDate, @SeriesId);" +
-                    "SELECT CAST(SCOPE_IDENTITY() as int)";
+                    var queryPremade = "INSERT INTO premade " +
+                    "(bookCoverId, code, price, sold, displayInStore, premadeOrder, dateAdded, purchaseDate, seriesId)" +
+                    "VALUES (@bookCoverId, @code, @price, @sold, @displayInStore, @premadeOrder, GETDATE(), @purchaseDate, @seriesId);" +
+                    "SELECT LAST_INSERT_ID()";
 
                     var parametersP = new DynamicParameters();
-                    parametersP.Add("BookCoverId", bookCoverId, DbType.Int32);
-                    parametersP.Add("Code", premadeDto.Code, DbType.String);
-                    parametersP.Add("Price", premadeDto.Price, DbType.Decimal);
-                    parametersP.Add("Sold", premadeDto.Sold, DbType.Boolean);
-                    parametersP.Add("DisplayInStore", premadeDto.DisplayInStore, DbType.Boolean);
-                    parametersP.Add("PremadeOrder", premadeDto.PremadeOrder, DbType.Int32);
-                    parametersP.Add("DateAdded", premadeDto.DateAdded, DbType.DateTime2);
-                    parametersP.Add("PurchaseDate", premadeDto.PurchaseDate, DbType.DateTime2);
-                    parametersP.Add("SeriesId", premadeDto.SeriesId, DbType.Int32);
+                    parametersP.Add("bookCoverId", bookCoverId, DbType.Int32);
+                    parametersP.Add("code", premadeDto.Code, DbType.String);
+                    parametersP.Add("price", premadeDto.Price, DbType.Decimal);
+                    parametersP.Add("sold", premadeDto.Sold, DbType.Boolean);
+                    parametersP.Add("displayInStore", premadeDto.DisplayInStore, DbType.Boolean);
+                    parametersP.Add("premadeOrder", premadeDto.PremadeOrder, DbType.Int32);
+                    parametersP.Add("dateAdded", premadeDto.DateAdded, DbType.DateTime2);
+                    parametersP.Add("purchaseDate", premadeDto.PurchaseDate, DbType.DateTime2);
+                    parametersP.Add("seriesId", premadeDto.SeriesId, DbType.Int32);
 
                     var premadeId = await connection.QuerySingleAsync<int>(queryPremade, parametersP, transaction: transaction);
 
@@ -127,51 +127,51 @@ namespace BookCoversApi.Repository
 
                 using (var transaction = connection.BeginTransaction())
                 {
-                    var queryPremade = "UPDATE dbo.Premade " +
-                    "SET BookCoverId = @BookCoverId," +
-                    "Code = @Code," +
-                    "Price = @Price," +
-                    "Sold = @Sold," +
-                    "DisplayInStore = @DisplayInStore," +
-                    "PremadeOrder = @PremadeOrder," +
-                    "DateAdded = @DateAdded," +
-                    "PurchaseDate = @PurchaseDate," +
-                    "SeriesId = @SeriesId " +
-                    "WHERE PremadeId = @PremadeId";
+                    var queryPremade = "UPDATE premade " +
+                    "SET bookCoverId = @bookCoverId," +
+                    "code = @code," +
+                    "price = @price," +
+                    "sold = @sold," +
+                    "displayInStore = @displayInStore," +
+                    "premadeOrder = @premadeOrder," +
+                    "dateAdded = @dateAdded," +
+                    "purchaseDate = @purchaseDate," +
+                    "seriesId = @seriesId " +
+                    "WHERE premadeId = @premadeId";
 
                     var parametersP = new DynamicParameters();
-                    parametersP.Add("PremadeId", premadeDto.PremadeId, DbType.Int32);
-                    parametersP.Add("BookCoverId", premadeDto.BookCoverId, DbType.Int32);
-                    parametersP.Add("Code", premadeDto.Code, DbType.String);
-                    parametersP.Add("Price", premadeDto.Price, DbType.Decimal);
-                    parametersP.Add("Sold", premadeDto.Sold, DbType.Boolean);
-                    parametersP.Add("DisplayInStore", premadeDto.DisplayInStore, DbType.Boolean);
-                    parametersP.Add("PremadeOrder", premadeDto.PremadeOrder, DbType.Int32);
-                    parametersP.Add("DateAdded", premadeDto.DateAdded, DbType.DateTime2);
-                    parametersP.Add("PurchaseDate", premadeDto.PurchaseDate, DbType.DateTime2);
-                    parametersP.Add("SeriesId", premadeDto.SeriesId, DbType.Int32);
+                    parametersP.Add("premadeId", premadeDto.PremadeId, DbType.Int32);
+                    parametersP.Add("bookCoverId", premadeDto.BookCoverId, DbType.Int32);
+                    parametersP.Add("code", premadeDto.Code, DbType.String);
+                    parametersP.Add("price", premadeDto.Price, DbType.Decimal);
+                    parametersP.Add("sold", premadeDto.Sold, DbType.Boolean);
+                    parametersP.Add("displayInStore", premadeDto.DisplayInStore, DbType.Boolean);
+                    parametersP.Add("premadeOrder", premadeDto.PremadeOrder, DbType.Int32);
+                    parametersP.Add("dateAdded", premadeDto.DateAdded, DbType.DateTime2);
+                    parametersP.Add("purchaseDate", premadeDto.PurchaseDate, DbType.DateTime2);
+                    parametersP.Add("seriesId", premadeDto.SeriesId, DbType.Int32);
 
                     await connection.QueryAsync(queryPremade, parametersP, transaction: transaction);
 
                     var queryBookCover = "UPDATE dbo.BookCover " +
-                    "SET Title = @Title, " +
-                    "AuthorName = @AuthorName," +
-                    "ThumbnailUrl = @ThumbnailUrl, " +
-                    "ImageUrl = @ImageUrl, " +
-                    "PortfolioOrder = @PortfolioOrder," +
-                    "ShowInPortfolio = @ShowInPortfolio, " +
-                    "GenreId = @GenreId " +
-                    "WHERE BookCoverId = @BookCoverId";
+                    "SET title = @title, " +
+                    "authorName = @authorName," +
+                    "thumbnailUrl = @thumbnailUrl, " +
+                    "imageUrl = @imageUrl, " +
+                    "portfolioOrder = @portfolioOrder," +
+                    "showInPortfolio = @showInPortfolio, " +
+                    "genreId = @genreId " +
+                    "WHERE BookCoverId = @bookCoverId";
 
                     var parametersBC = new DynamicParameters();
-                    parametersBC.Add("BookCoverId", premadeDto.BookCoverId, DbType.Int32);
-                    parametersBC.Add("Title", premadeDto.BookCover.Title, DbType.String);
-                    parametersBC.Add("AuthorName", premadeDto.BookCover.AuthorName, DbType.String);
-                    parametersBC.Add("ThumbnailUrl", premadeDto.BookCover.ThumbnailUrl, DbType.String);
-                    parametersBC.Add("ImageUrl", premadeDto.BookCover.ImageUrl, DbType.String);
-                    parametersBC.Add("PortfolioOrder", premadeDto.BookCover.PortfolioOrder, DbType.Int32);
-                    parametersBC.Add("ShowInPortfolio", premadeDto.BookCover.ShowInPortfolio, DbType.String);
-                    parametersBC.Add("GenreId", premadeDto.BookCover.GenreId, DbType.Int32);
+                    parametersBC.Add("bookCoverId", premadeDto.BookCoverId, DbType.Int32);
+                    parametersBC.Add("title", premadeDto.BookCover.Title, DbType.String);
+                    parametersBC.Add("authorName", premadeDto.BookCover.AuthorName, DbType.String);
+                    parametersBC.Add("thumbnailUrl", premadeDto.BookCover.ThumbnailUrl, DbType.String);
+                    parametersBC.Add("imageUrl", premadeDto.BookCover.ImageUrl, DbType.String);
+                    parametersBC.Add("portfolioOrder", premadeDto.BookCover.PortfolioOrder, DbType.Int32);
+                    parametersBC.Add("showInPortfolio", premadeDto.BookCover.ShowInPortfolio, DbType.String);
+                    parametersBC.Add("genreId", premadeDto.BookCover.GenreId, DbType.Int32);
 
                     await connection.QueryAsync(queryBookCover, parametersBC, transaction: transaction);
 
@@ -182,7 +182,7 @@ namespace BookCoversApi.Repository
 
         public async Task Delete(int id)
         {
-            var query = "DELETE FROM dbo.Premade WHERE PremadeId = @id";
+            var query = "DELETE FROM premade WHERE premadeId = @id";
 
             using (var connection = _context.CreateConnection())
             {

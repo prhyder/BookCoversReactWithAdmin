@@ -21,8 +21,8 @@ namespace BookCoversApi.Repository
         }
         public async Task<Series> GetSeriesBySeriesId(int id)
         {
-            var query = "SELECT * FROM dbo.Series WHERE SeriesId = @id";
-            var queryPremades = "SELECT PremadeId, OrderInSeries FROM dbo.PremadeSeries WHERE SeriesId = @id";
+            var query = "SELECT * FROM series WHERE seriesId = @id";
+            var queryPremades = "SELECT premadeId, orderInSeries FROM premadeSeries WHERE seriesId = @id";
 
             using (var connection = _context.CreateConnection())
             {
@@ -43,11 +43,11 @@ namespace BookCoversApi.Repository
 
         public async Task<Series> GetSeriesByPremadeId(int premadeId)
         {
-            var query = "SELECT Series.SeriesId, Series.SeriesName, Series.SeriesPrice " +
-                "FROM Series JOIN PremadeSeries ON PremadeSeries.SeriesId = Series.SeriesId " +
-                "WHERE PremadeSeries.PremadeId = @premadeId";
+            var query = "SELECT series.seriesId, series.seriesName, series.seriesPrice " +
+                "FROM series JOIN premadeSeries ON premadeSeries.seriesId = series.seriesId " +
+                "WHERE premadeSeries.premadeId = @premadeId";
 
-            var queryPremades = "SELECT PremadeId, OrderInSeries FROM dbo.PremadeSeries WHERE SeriesId = @id";
+            var queryPremades = "SELECT premadeId, orderInSeries FROM premadeSeries WHERE seriesId = @id";
 
             using (var connection = _context.CreateConnection())
             {
@@ -73,13 +73,13 @@ namespace BookCoversApi.Repository
 
         public async Task<Series> CreateSeries(SeriesDTO series)
         {
-            var query = "INSERT INTO dbo.Series (SeriesName, SeriesPrice)" +
-                "VALUES (@SeriesName, @SeriesPrice);" +
-                "SELECT CAST(SCOPE_IDENTITY() as int)";
+            var query = "INSERT INTO series (seriesName, seriesPrice)" +
+                "VALUES (@seriesName, @seriesPrice);" +
+                "SELECT LAST_INSERT_ID()";
 
             var parameters = new DynamicParameters();
-            parameters.Add("SeriesName", series.SeriesName, DbType.String);
-            parameters.Add("SeriesPrice", series.SeriesPrice, DbType.Decimal);
+            parameters.Add("seriesName", series.SeriesName, DbType.String);
+            parameters.Add("seriesPrice", series.SeriesPrice, DbType.Decimal);
 
             using (var connection = _context.CreateConnection())
             {
@@ -98,13 +98,13 @@ namespace BookCoversApi.Repository
 
         public async Task AddPremadeToSeries(PremadeSeriesDTO premadeSeries)
         {
-            var query = "INSERT INTO dbo.PremadeSeries (SeriesId, PremadeId, OrderInSeries) " +
-                "VALUES (@SeriesId, @PremadeId, @OrderInSeries)";
+            var query = "INSERT INTO premadeSeries (seriesId, premadeId, orderInSeries) " +
+                "VALUES (@seriesId, @premadeId, @orderInSeries)";
 
             var parameters = new DynamicParameters();
-            parameters.Add("SeriesId", premadeSeries.SeriesId, DbType.Int32);
-            parameters.Add("PremadeId", premadeSeries.PremadeId, DbType.Int32);
-            parameters.Add("OrderInSeries", premadeSeries.OrderInSeries, DbType.Int32);
+            parameters.Add("seriesId", premadeSeries.SeriesId, DbType.Int32);
+            parameters.Add("premadeId", premadeSeries.PremadeId, DbType.Int32);
+            parameters.Add("orderInSeries", premadeSeries.OrderInSeries, DbType.Int32);
 
             using (var connection = _context.CreateConnection())
             {
@@ -119,7 +119,7 @@ namespace BookCoversApi.Repository
 
         public async Task DeleteSeries(int id)
         {
-            var query = "DELETE FROM dbo.Series WHERE SeriesId = @id";
+            var query = "DELETE FROM series WHERE seriesId = @id";
 
             using (var connection = _context.CreateConnection())
             {
@@ -129,7 +129,7 @@ namespace BookCoversApi.Repository
 
         public async Task RemovePremadeFromSeries(int premadeId)
         {
-            var query = "DELETE FROM dbo.PremadeSeries WHERE PremadeId = @premadeId";
+            var query = "DELETE FROM premadeSeries WHERE premadeId = @premadeId";
 
             using (var connection = _context.CreateConnection())
             {
@@ -139,15 +139,15 @@ namespace BookCoversApi.Repository
 
         public async Task UpdateSeries(int id, SeriesDTO series)
         {
-            var query = "UPDATE dbo.Series " +
-                "SET SeriesName = @SeriesName, " +
-                "SeriesPrice = @SeriesPrice " +
-                "WHERE SeriesId = @SeriesId";
+            var query = "UPDATE series " +
+                "SET seriesName = @seriesName, " +
+                "seriesPrice = @seriesPrice " +
+                "WHERE seriesId = @seriesId";
 
             var parameters = new DynamicParameters();
-            parameters.Add("SeriesId", id, DbType.Int32);
-            parameters.Add("SeriesName", series.SeriesName, DbType.String);
-            parameters.Add("SeriesPrice", series.SeriesPrice, DbType.Decimal);
+            parameters.Add("seriesId", id, DbType.Int32);
+            parameters.Add("seriesName", series.SeriesName, DbType.String);
+            parameters.Add("seriesPrice", series.SeriesPrice, DbType.Decimal);
 
             using (var connection = _context.CreateConnection())
             {

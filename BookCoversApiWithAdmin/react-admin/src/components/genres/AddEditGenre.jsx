@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, query } from 'next/router';
 import axios from 'axios';
-import { TextField, FormGroup, Button } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Link from 'next/link';
 import ButtonWithLoadingIndicator from '../ButtonWithLoadingIndicator';
 import BackButtonLink from '../BackButtonLink';
+import ConfirmModal from '../ConfirmModal';
 import { useFormik } from 'formik';
 import { apiUrl } from '../../../config.js';
 import * as yup from 'yup';
@@ -20,6 +18,19 @@ const AddEditGenre = (props) => {
 	const [errorText, setErrorText] = useState('');
 	const [genre, setGenre] = useState([]);
 	const [formSubmitted, setFormSubmitted] = useState(false);
+
+	const [values, setValues] = useState({
+		id: '',
+		name: '',
+	});
+
+	const onUpdateValue = e => {
+		const nextFormState = {
+			...values,
+			[e.target.name]: e.target.value
+		};
+		setValues(nextFormState);
+	}
 
 	const getGenreById = async () => {
 		try {
@@ -44,7 +55,6 @@ const AddEditGenre = (props) => {
 		name: yup
 			.string('Enter a name')
 			.required('Name is required'),
-
 	});
 
 	const formik = useFormik({
@@ -53,12 +63,12 @@ const AddEditGenre = (props) => {
 		},
 		enableReinitialize: true,
 		validationSchema: validationSchema,
-		onSubmit: values => {
+		onSubmit: formValues => {
 			setFormSubmitted(true);
 
 			if (isAddMode) {
-				axios.post(API_URL, values)
-					.then((response) => {
+				axios.post(API_URL, formValues)
+					.then(() => {
 						router.push('/genres');
 					})
 					.catch((error) => {
@@ -67,10 +77,10 @@ const AddEditGenre = (props) => {
 					});
 			}
 			else {
-				const name = values.name;
+				const name = formValues.name;
 				const genreToUpdate = { Name: name, GenreId: parseInt(genreId) };
 				axios.put(API_URL, genreToUpdate)
-					.then((response) => {
+					.then(() => {
 						router.push('/genres');
 					})
 					.catch((error) => {
@@ -81,43 +91,58 @@ const AddEditGenre = (props) => {
 		}
 	});
 
-	const textBoxStyle = {
-		width: "300px",
+	const handleCancel = () => {
+		if (formik.dirty) {
+			showConfirmModalButton.click();
+		}
+		else {
+			router.push('/genres');
+		}
+	}
+
+	const handleClickYes = () => {
+		router.push('/genres');
 	}
 
 	return (
 		<>
-			<BackButtonLink text='Back to Genres' url='/genres' />
-			<form onSubmit={formik.handleSubmit}>
-				<FormGroup>
-					<h1>{isAddMode ? 'Add Genre' : 'Edit Genre'}</h1>
-					<TextField
-						size="small"
-						variant="outlined"
-						label="Name"
+			<BackButtonLink text='Back to Genres' onClick={handleCancel} />
+
+			<h1>{isAddMode ? 'Add Genre' : 'Edit Genre'}</h1>
+			<form className="g-3 mt-4 form-outline" onSubmit={formik.handleSubmit}>
+				<div className="mb-3">
+					<label htmlFor="name" className="form-label">
+						Genre Name
+					</label>
+					<input
 						id="name"
+						type="text"
+						className="form-control"
 						name="name"
-						type="name"
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
 						value={formik.values.name}
-						error={formik.touched.name && Boolean(formik.errors.name)}
-						helperText={formik.touched.name && formik.errors.name}
-						InputLabelProps={{
-							shrink: true,
-						}}
-						style={textBoxStyle}
 					/>
-				</FormGroup>
+					<div className="error-text">{formik.touched.name && formik.errors.name}</div>
+					<div className="error-text">{formik.touched.name && Boolean(formik.errors.name)}</div>
+				</div>
+				<div className="mb-3">
+				<button type="button" className="btn btn-secondary d-inline mt-2 me-2" onClick={handleCancel} >
+					Cancel
+				</button>
+					<ButtonWithLoadingIndicator
+						type="submit"
+						className="btn btn-primary d-inline mt-2 me-2"
+						text={"Submit"}
+						showLoadingIndicator={formSubmitted}
+					/>
+				</div>
 
-				<ButtonWithLoadingIndicator
-					type="submit"
-					sx={{ marginTop: 1 }}
-					text={"Submit"}
-					showLoadingIndicator={formSubmitted}
-				/>
+				<p className='error-text'>{errorText}</p>
+				
 			</form>
-			<p className='error-text'>{errorText}</p>
+
+			<ConfirmModal text="Are you sure you want to cancel?" onClickYes={handleClickYes} />
 		</>
 	)
 }

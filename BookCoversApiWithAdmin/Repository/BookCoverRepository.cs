@@ -22,7 +22,7 @@ namespace BookCoversApi.Repository
 
         public async Task<IList<BookCover>> GetBookCovers()
         {
-            var query = "SELECT * FROM dbo.BookCover";
+            var query = "SELECT * FROM bookCover";
 
             using (var connection = _context.CreateConnection())
             {
@@ -33,7 +33,7 @@ namespace BookCoversApi.Repository
 
         public async Task<BookCover> GetById(int id)
         {
-            var query = "SELECT * FROM dbo.BookCover WHERE BookCoverId = @id";
+            var query = "SELECT * FROM bookCover WHERE bookCoverId = @id";
 
             using (var connection = _context.CreateConnection())
             {
@@ -44,19 +44,19 @@ namespace BookCoversApi.Repository
 
         public async Task<BookCover> Add(BookCoverDTO bookCoverDto)
         {
-            var query = "INSERT INTO dbo.BookCover " +
-                "(Title, AuthorName, ThumbnailUrl, ImageUrl, PortfolioOrder, ShowInPortfolio, GenreId) " +
-                "VALUES (@Title, @AuthorName, @ThumbnailUrl, @ImageUrl, @PortfolioOrder, @ShowInPortfolio, @GenreId);" +
-                "SELECT CAST(SCOPE_IDENTITY() as int)";
+            var query = "INSERT INTO bookCover " +
+                "(title, authorName, thumbnailUrl, imageUrl, portfolioOrder, showInPortfolio, genreId) " +
+                "VALUES (@title, @authorName, @thumbnailUrl, @imageUrl, @portfolioOrder, @showInPortfolio, @genreId);" +
+                "SELECT LAST_INSERT_ID()";
 
             var parameters = new DynamicParameters();
-            parameters.Add("Title", bookCoverDto.Title, DbType.String);
-            parameters.Add("AuthorName", bookCoverDto.AuthorName, DbType.String);
-            parameters.Add("ThumbnailUrl", bookCoverDto.ThumbnailUrl, DbType.String);
-            parameters.Add("ImageUrl", bookCoverDto.ImageUrl, DbType.String);
-            parameters.Add("PortfolioOrder", bookCoverDto.PortfolioOrder, DbType.Int32);
-            parameters.Add("ShowInPortfolio", bookCoverDto.ShowInPortfolio, DbType.Boolean);
-            parameters.Add("GenreId", bookCoverDto.GenreId, DbType.Int32);
+            parameters.Add("title", bookCoverDto.Title, DbType.String);
+            parameters.Add("authorName", bookCoverDto.AuthorName, DbType.String);
+            parameters.Add("thumbnailUrl", bookCoverDto.ThumbnailUrl, DbType.String);
+            parameters.Add("imageUrl", bookCoverDto.ImageUrl, DbType.String);
+            parameters.Add("portfolioOrder", bookCoverDto.PortfolioOrder, DbType.Int32);
+            parameters.Add("showInPortfolio", bookCoverDto.ShowInPortfolio, DbType.Boolean);
+            parameters.Add("genreId", bookCoverDto.GenreId, DbType.Int32);
 
             using (var connection = _context.CreateConnection())
             {
@@ -81,25 +81,25 @@ namespace BookCoversApi.Repository
 
         public async Task Update(BookCoverDTO bookCover)
         {
-            var query = "UPDATE dbo.BookCover " +
-                "SET Title = @Title, " +
-                "AuthorName = @AuthorName," +
-                "ThumbnailUrl = @ThumbnailUrl, " +
-                "ImageUrl = @ImageUrl, " +
-                "PortfolioOrder = @PortfolioOrder," +
-                "ShowInPortfolio = @ShowInPortfolio, " +
-                "GenreId = @GenreId " +
-                "WHERE BookCoverId = @BookCoverId";
+            var query = "UPDATE bookCover " +
+                "SET title = @Title, " +
+                "authorName = @AuthorName, " +
+                "thumbnailUrl = @ThumbnailUrl, " +
+                "imageUrl = @ImageUrl, " +
+                "portfolioOrder = @PortfolioOrder, " +
+                "showInPortfolio = @ShowInPortfolio, " +
+                "genreId = @GenreId " +
+                "WHERE bookCoverId = @BookCoverId";
 
             var parameters = new DynamicParameters();
-            parameters.Add("BookCoverId", bookCover.BookCoverId, DbType.Int32);
-            parameters.Add("Title", bookCover.Title, DbType.String);
-            parameters.Add("AuthorName", bookCover.AuthorName, DbType.String);
-            parameters.Add("ThumbnailUrl", bookCover.ThumbnailUrl, DbType.String);
-            parameters.Add("ImageUrl", bookCover.ImageUrl, DbType.String);
-            parameters.Add("PortfolioOrder", bookCover.PortfolioOrder, DbType.Int32);
-            parameters.Add("ShowInPortfolio", bookCover.ShowInPortfolio, DbType.String);
-            parameters.Add("GenreId", bookCover.GenreId, DbType.Int32);
+            parameters.Add("bookCoverId", bookCover.BookCoverId, DbType.Int32);
+            parameters.Add("title", bookCover.Title, DbType.String);
+            parameters.Add("authorName", bookCover.AuthorName, DbType.String);
+            parameters.Add("thumbnailUrl", bookCover.ThumbnailUrl, DbType.String);
+            parameters.Add("imageUrl", bookCover.ImageUrl, DbType.String);
+            parameters.Add("portfolioOrder", bookCover.PortfolioOrder, DbType.Int32);
+            parameters.Add("showInPortfolio", bookCover.ShowInPortfolio, DbType.Byte);
+            parameters.Add("genreId", bookCover.GenreId, DbType.Int32);
 
             using (var connection = _context.CreateConnection())
             {
@@ -109,7 +109,7 @@ namespace BookCoversApi.Repository
 
         public async Task Delete(int id)
         {
-            var query = "DELETE FROM dbo.BookCover WHERE BookCoverId = @id";
+            var query = "DELETE FROM bookCover WHERE bookCoverId = @id";
 
             using (var connection = _context.CreateConnection())
             {

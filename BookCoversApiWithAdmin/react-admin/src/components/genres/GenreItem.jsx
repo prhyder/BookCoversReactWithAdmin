@@ -1,0 +1,29 @@
+export default function GenreItem({genre, onClickEdit, onClickDelete }) {
+	const { genreId, name } = genre;
+
+	return (
+		<tr className="align-middle">
+			<td>{genreId}</td>
+			<td>{name}</td>
+			<td>
+				<button
+					value={genreId}
+					type="button"
+					className="btn btn-dark d-inline me-2"
+					onClick={onClickEdit}
+				>
+					Edit
+				</button>
+				<button
+					data-name={name}
+					value={genreId}
+					type="button"
+					className="btn btn-dark d-inline"
+					onClick={onClickDelete}
+				>
+					Delete
+				</button>
+			</td>
+		</tr>
+	);
+}

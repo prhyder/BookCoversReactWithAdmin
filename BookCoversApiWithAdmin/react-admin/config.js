@@ -1,6 +1,5 @@
-const apiUrl = process.env.NODE_ENV === 'development'
-	? 'https://localhost:5001/api' // Development API
-	: 'https://localhost:5001/api'; // Production API
+//const apiUrl = 'https://localhost:5001/api';
+const apiUrl = 'https://localhost:44306/api';
 
 export {
 	apiUrl

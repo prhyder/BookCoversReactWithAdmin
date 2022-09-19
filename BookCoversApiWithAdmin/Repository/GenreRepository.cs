@@ -21,7 +21,7 @@ namespace BookCoversApi.Repository
         }
         public async Task<IList<Genre>> GetGenres()
         {
-            var query = "SELECT * FROM dbo.Genre";
+            var query = "SELECT * FROM genre";
 
             using (var connection = _context.CreateConnection())
             {
@@ -32,7 +32,7 @@ namespace BookCoversApi.Repository
 
         public async Task<Genre> GetById(int id)
         {
-            var query = "SELECT * FROM dbo.Genre WHERE GenreId = @id";
+            var query = "SELECT * FROM genre WHERE genreId = @id";
 
             using (var connection = _context.CreateConnection())
             {
@@ -43,11 +43,11 @@ namespace BookCoversApi.Repository
 
         public async Task<Genre> Add(GenreDTO genre)
         {
-            var query = "INSERT INTO dbo.Genre (Name) VALUES (@Name);" +
-                "SELECT CAST(SCOPE_IDENTITY() as int)";
+            var query = "INSERT INTO genre (name) VALUES (@name);" +
+                "SELECT LAST_INSERT_ID()";
 
             var parameters = new DynamicParameters();
-            parameters.Add("Name", genre.Name, DbType.String);
+            parameters.Add("name", genre.Name, DbType.String);
             
             using (var connection = _context.CreateConnection())
             {
@@ -65,7 +65,7 @@ namespace BookCoversApi.Repository
 
         public async Task Update(GenreDTO genre)
         {
-            var query = "UPDATE dbo.Genre SET Name = @Name WHERE GenreId = @GenreId";
+            var query = "UPDATE genre SET name = @name WHERE genreId = @genreId";
 
             var parameters = new DynamicParameters();
             parameters.Add("GenreId", genre.GenreId, DbType.Int32);
@@ -79,7 +79,7 @@ namespace BookCoversApi.Repository
 
         public async Task Delete(int id)
         {
-            var query = "DELETE FROM dbo.Genre WHERE GenreId = @id";
+            var query = "DELETE FROM genre WHERE genreId = @id";
 
             using (var connection = _context.CreateConnection())
             {

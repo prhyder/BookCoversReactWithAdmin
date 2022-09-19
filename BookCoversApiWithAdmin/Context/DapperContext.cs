@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using MySql.Data.MySqlClient;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,10 @@ namespace BookCoversApi.Context
         public DapperContext(IConfiguration configuration)
         {
             _configuration = configuration;
-            _connectionString = _configuration.GetConnectionString("SqlConnection");
+            _connectionString = _configuration.GetConnectionString("MySqlConnection");
         }
 
-        public SqlConnection CreateConnection() => new SqlConnection(_connectionString);
+        public MySqlConnection CreateConnection() => new MySqlConnection(_connectionString);
 
     }
 }

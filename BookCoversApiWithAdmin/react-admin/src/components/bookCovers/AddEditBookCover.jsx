@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { TextField, FormGroup } from '@mui/material';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemText from '@mui/material/ListItemText';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import ButtonWithLoadingIndicator from '../ButtonWithLoadingIndicator';
 import BackButtonLink from '../BackButtonLink';
 import Image from 'next/image';
+import ConfirmModal from '../ConfirmModal';
 import { useFormik } from 'formik';
 import { apiUrl } from '../../../config.js';
 import * as yup from 'yup';
@@ -75,7 +70,7 @@ const AddEditBookCover = (props) => {
 			.string()
 			.required('Image is required'),
 		genreId: yup
-			.string()
+			.number()
 	});
 
 	const formik = useFormik({
@@ -90,6 +85,7 @@ const AddEditBookCover = (props) => {
 		validationSchema: validationSchema,
 		onSubmit: values => {
 			setFormSubmitted(true);
+			values.genreId = parseInt(values.genreId);
 
 			if (isAddMode) {
 				axios({
@@ -103,7 +99,7 @@ const AddEditBookCover = (props) => {
 					router.push('/bookCovers');
 				}).catch((error) => {
 						console.log("Error: ", error);
-						setErrorText("There was an error when trying to update the book cover.");
+						setErrorText("There was an error when trying to create the book cover.");
 					});
 			}
 			else {
@@ -126,156 +122,137 @@ const AddEditBookCover = (props) => {
 		}
 	});
 
-	const textBoxStyle = {
-		width: "350px",
-		marginBottom: "15px"
+	const handleCancel = () => {
+		if (formik.dirty) {
+			showConfirmModalButton.click();
+		}
+		else {
+			router.push('/bookCovers');
+		}
+	}
+
+	const handleClickYes = () => {
+		router.push('/bookCovers');
 	}
 
 	const imageStyle = {
 		marginBottom: "25px"
 	}
 
-	const selectStyle = {
-		height: "40px",
-		width: "350px",
-		marginBottom: "15px",
-		paddingBottom: "3px"
-	}
-
-	const labelStyle = {
-		marginBottom: "16px",
-		paddingLeft: "3px",
-		paddingRight: "3px",
-		backgroundColor: "white",
-		background: "white"
-	}
-
 	return (
 		<>
-			<BackButtonLink text='Back to Book Covers' url='/bookCovers' />
+			<BackButtonLink text='Back to Book Covers' onClick={handleCancel} />
 
-			<form onSubmit={formik.handleSubmit}>
-				<FormGroup>
-					<h1>{isAddMode ? 'Add Book Cover' : 'Edit Book Cover'}</h1>
-
-					<div style={imageStyle}>
-						{formik.values.imageUrl
-							&& <Image
-								src={formik.values.imageUrl}
-								width={156}
-								height={250}
-								layout="fixed"
-								priority
-							/>}
+			<h1>{isAddMode ? 'Add Book Cover' : 'Edit Book Cover'}</h1>
+			<form className="g-3 mt-4 form-outline" onSubmit={formik.handleSubmit}>
+				<div style={imageStyle}>
+					{formik.values.imageUrl
+						&& <Image
+							src={formik.values.imageUrl}
+							width={156}
+							height={250}
+							layout="fixed"
+							priority
+						/>}
 					</div>
-					
-					<FormControl>
-						<InputLabel id="image-select-label" style={labelStyle} shrink={true}>Image URL</InputLabel>
-						<Select
-								labelId="image-select-label"
-							id="select-book-image"
-								value={formik.values.imageUrl}
-								style={selectStyle}
-							name="imageUrl"
-							defaultValue={formik.values.imageUrl}
-							onChange={e => {
-								const imageUrlValue = e.target.value;
-								setBookCover({
-									title: formik.values.title,
-									authorName: formik.values.authorName,
-									genreId: formik.values.genreId,
-									imageUrl: imageUrlValue
-								});
-							}}>
-							{imagePathsList && imagePathsList.map((option) => (
-								<MenuItem key={option} value={`/images/${option}`}>
-									<img
-										id='selected-image'
-										src={`/images/${option}`}
-										width="100px"
-										height="auto"
-										sx={{ marginRight: 2 }}
-									/>
-									<ListItemText primary={option} />
-								</MenuItem>
-							))}
-						</Select>
-					</FormControl>
 				
-					<TextField
-						size="small"
-						variant="outlined"
-						label="Title"
+				<div className="mb-3">
+					<label htmlFor="name" className="form-label">
+						Image URL
+					</label>
+					<select
+						id="imageUrl"
+						className="form-select"
+						name="imageUrl"
+						onChange={formik.handleChange}
+						onBlur={formik.handleBlur}
+						value={formik.values.imageUrl}
+						>
+						{imagePathsList.map((image, index) => (
+							<option key={index} value={`/images/${image}`}>
+								{image}
+							</option>
+						))}
+
+					</select>
+					<div className="error-text">{formik.touched.imageUrl && formik.errors.imageUrl}</div>
+					<div className="error-text">{formik.touched.imageUrl && Boolean(formik.errors.imageUrl)}</div>
+
+					
+				</div>
+				<div className="mb-3">
+					<label htmlFor="title" className="form-label">
+						Book Title
+					</label>
+					<input
 						id="title"
 						name="title"
-						type="title"
+						className="form-control"
+						type="text"
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
 						value={formik.values.title}
-						error={formik.touched.title && Boolean(formik.errors.title)}
-						helperText={formik.touched.title && formik.errors.title}
-						InputLabelProps={{
-							shrink: true,
-						}}
-						style={textBoxStyle}
 					/>
-					<TextField
-						size="small"
-						variant="outlined"
-						label="Author Name"
+					<div className="error-text">{formik.touched.title && formik.errors.title}</div>
+					<div className="error-text">{formik.touched.title && Boolean(formik.errors.title)}</div>
+				</div>
+				<div className="mb-3">
+					<label htmlFor="name" className="form-label">
+						Author Name
+					</label>
+					<input
 						id="authorName"
 						name="authorName"
-						type="authorName"
+						className="form-control"
+						type="text"
 						onChange={formik.handleChange}
 						onBlur={formik.handleBlur}
 						value={formik.values.authorName}
-						error={formik.touched.authorName && Boolean(formik.errors.authorName)}
-						helperText={formik.touched.authorName && formik.errors.authorName}
-						InputLabelProps={{
-							shrink: true,
-						}}
-						style={textBoxStyle}
 					/>
+					<div className="error-text">{formik.touched.authorName && formik.errors.authorName}</div>
+					<div className="error-text">{formik.touched.authorName && Boolean(formik.errors.authorName)}</div>
+				</div>
+				<div className="mb-3">
+					<label htmlFor="name" className="form-label">
+						Genre
+					</label>
+					<select
+						id="genreId"
+						className="form-select"
+						name="genreId"
+						type="number"
+						onChange={formik.handleChange}
+						onBlur={formik.handleBlur}
+						value={formik.values.genreId}
+					>
+						{genres.map((genre) => (
+							<option key={genre.genreId} value={parseInt(genre.genreId)}>
+								{genre.name}
+							</option>
+						))}
 
-
-					<FormControl>
-						<InputLabel id="genre-select-label" style={labelStyle} shrink={true}>Genre</InputLabel>
-						<Select
-							labelId="genre-select-label"
-							size="small"
-							id="select-genre"
-							value={formik.values.genreId}
-							height={25}
-							style={selectStyle}
-							name="genreId"
-							defaultValue={formik.values.genreId}
-							onChange={e => {
-								const genreId = e.target.value;
-								setBookCover({
-									title: formik.values.title,
-									authorName: formik.values.authorName,
-									genreId: genreId,
-									imageUrl: formik.values.imageUrl
-								});
-							}}>
-							{genres.map((genre) => (
-								<MenuItem key={genre.genreId} value={genre.genreId}>
-									<ListItemText primary={genre.name} />
-								</MenuItem>
-							))}
-						</Select>
-					</FormControl>
-
-				</FormGroup>
-				<ButtonWithLoadingIndicator
-					type="submit"
-					sx={{ marginTop: 1 }}
-					text={"Submit"}
-					showLoadingIndicator={formSubmitted}
-				/>
+					</select>
+					<div className="error-text">{formik.touched.genreId && formik.errors.genreId}</div>
+					<div className="error-text">{formik.touched.genreId && Boolean(formik.errors.genreId)}</div>
+				</div>
+				
+				<div className="mb-3">
+					<button type="button" className="btn btn-secondary d-inline mt-2 me-2" onClick={handleCancel} >
+						Cancel
+					</button>
+					<ButtonWithLoadingIndicator
+						type="submit"
+						className="btn btn-primary d-inline mt-2 me-2"
+						text={"Submit"}
+						showLoadingIndicator={formSubmitted}
+					/>
+				</div>
 
 				<p className='error-text'>{errorText}</p>
+				
 			</form>
+
+			<ConfirmModal text="Are you sure you want to cancel?" onClickYes={handleClickYes} />
 
 		</>
 	)

@@ -1,4 +1,7 @@
-@import 'tokens.scss';
+@import 'colors.scss';
+@import "login.scss";
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../../node_modules/bootstrap-icons/font/bootstrap-icons.scss";
 
 html,
 body {
@@ -22,32 +25,32 @@ a {
   box-sizing: border-box;
 }
 
+form {
+  max-width: 600px;
+}
+
+label{
+	color: $dark-primary-color;
+}
+
 .error-text{
 	color: $error-red;
 	font-size: smaller;
+}
+
+a.link-hover:hover {
+  text-decoration: underline;
 }
 
 .add-button {
 	margin-bottom: 16px;
 }
 
-#select-book-image #selected-image{
-	visibility: collapse;
-	height: 0px;
-  }
-  
-  #select-book-image 
-  {
-	.MuiTypography-root{
-		margin-top: -12px;
-		margin-bottom: 12px;
-	  }
-  }
+.nav-link {
+  color: white;
+}
 
-  label{
-	color: $dark-primary-color;
-  }
-
- .MuiInputLabel-root.MuiInputLabel-formControl{
-	color: $dark-primary-color;
-  }
+.pageRoot{
+    margin-top: 40px;
+    margin-left: 20px;
+}

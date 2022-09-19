@@ -5,7 +5,10 @@ VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BookCoversApiWithAdmin", "BookCoversApiWithAdmin\BookCoversApiWithAdmin.csproj", "{CFEF85AD-9101-43F5-97C6-D3E7C819F201}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Database", "Database\Database.sqlproj", "{A6F8455D-E4BE-4AB6-A54D-B22B162FB0FA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{01A9D3C5-4FA1-48D8-BD72-F22A0FE354FB}"
+	ProjectSection(SolutionItems) = preProject
+		db_init.sql = db_init.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,12 +20,6 @@ Global
 		{CFEF85AD-9101-43F5-97C6-D3E7C819F201}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFEF85AD-9101-43F5-97C6-D3E7C819F201}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFEF85AD-9101-43F5-97C6-D3E7C819F201}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A6F8455D-E4BE-4AB6-A54D-B22B162FB0FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A6F8455D-E4BE-4AB6-A54D-B22B162FB0FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A6F8455D-E4BE-4AB6-A54D-B22B162FB0FA}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{A6F8455D-E4BE-4AB6-A54D-B22B162FB0FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A6F8455D-E4BE-4AB6-A54D-B22B162FB0FA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A6F8455D-E4BE-4AB6-A54D-B22B162FB0FA}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
