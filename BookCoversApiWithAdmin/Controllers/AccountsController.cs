@@ -33,7 +33,6 @@ namespace BookCoversApiWithAdmin.Controllers
                 return BadRequest();
             }
 
-            // TODO: Make sure I'm including all needed properties.
             var user = new ApplicationUser
             {
                 FirstName = userForRegistration.FirstName,
@@ -60,7 +59,7 @@ namespace BookCoversApiWithAdmin.Controllers
 
             if (user == null || !await _userManager.CheckPasswordAsync(user, userForAuthentication.Password))
             {
-                return Unauthorized(new AuthResponseDto { ErrorMessage = "Invalid Authenticaion" });
+                return Unauthorized(new AuthResponseDto { ErrorMessage = "Incorrect username or password." });
             }
 
             var signingCredentials = _jwtHandler.GetSigningCredentials();

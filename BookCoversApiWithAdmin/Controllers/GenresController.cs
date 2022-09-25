@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace BookCoversApi.Controllers
 {
     [Route("api/[controller]")]
-    //[Authorize(AuthenticationSchemes = "Bearer")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [ApiController]
     public class GenresController : ControllerBase
     {

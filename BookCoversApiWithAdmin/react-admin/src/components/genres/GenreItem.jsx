@@ -15,11 +15,10 @@ export default function GenreItem({genre, onClickEdit, onClickDelete }) {
 					Edit
 				</button>
 				<button
-					data-name={name}
 					value={genreId}
 					type="button"
 					className="btn btn-dark d-inline"
-					onClick={onClickDelete}
+					onClick={(event) => { onClickDelete(event, name) }}
 				>
 					Delete
 				</button>

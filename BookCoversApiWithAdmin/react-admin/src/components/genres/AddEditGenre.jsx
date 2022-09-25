@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, query } from 'next/router';
-import axios from 'axios';
 import ButtonWithLoadingIndicator from '../ButtonWithLoadingIndicator';
 import BackButtonLink from '../BackButtonLink';
 import ConfirmModal from '../ConfirmModal';
 import { useFormik } from 'formik';
-import { apiUrl } from '../../../config.js';
+import getConfig from 'next/config';
 import * as yup from 'yup';
 
-const API_URL = `${apiUrl}/genres/`;
+import { fetchWrapper } from '../../helpers/fetch-wrapper';
+
+const { publicRuntimeConfig } = getConfig();
+const API_URL = `${publicRuntimeConfig.apiUrl}/genres/`;
 
 const AddEditGenre = (props) => {
 	const router = useRouter();
@@ -19,24 +21,10 @@ const AddEditGenre = (props) => {
 	const [genre, setGenre] = useState([]);
 	const [formSubmitted, setFormSubmitted] = useState(false);
 
-	const [values, setValues] = useState({
-		id: '',
-		name: '',
-	});
-
-	const onUpdateValue = e => {
-		const nextFormState = {
-			...values,
-			[e.target.name]: e.target.value
-		};
-		setValues(nextFormState);
-	}
-
 	const getGenreById = async () => {
 		try {
-			const url = API_URL + genreId;
-			const genre = await axios.get(url);
-			setGenre(genre.data);
+			const data = await fetchWrapper.get(`${API_URL}/${genreId}`);
+			setGenre(data);
 		}
 		catch (err) {
 			console.log(`Error: ${err}`)
@@ -45,9 +33,7 @@ const AddEditGenre = (props) => {
 
 	useEffect(() => {
 		if (!isAddMode) {
-			(async () => {
-				getGenreById();
-			})();
+			getGenreById();
 		}
 	}, []);
 
@@ -59,15 +45,16 @@ const AddEditGenre = (props) => {
 
 	const formik = useFormik({
 		initialValues: {
-			name: genre.name || ''
+			name: genre.name || '',
+			genreId: genre.genreId
 		},
 		enableReinitialize: true,
 		validationSchema: validationSchema,
-		onSubmit: formValues => {
+		onSubmit: values => {
 			setFormSubmitted(true);
 
 			if (isAddMode) {
-				axios.post(API_URL, formValues)
+				fetchWrapper.post(API_URL, values)
 					.then(() => {
 						router.push('/genres');
 					})
@@ -77,9 +64,7 @@ const AddEditGenre = (props) => {
 					});
 			}
 			else {
-				const name = formValues.name;
-				const genreToUpdate = { Name: name, GenreId: parseInt(genreId) };
-				axios.put(API_URL, genreToUpdate)
+				fetchWrapper.put(API_URL, values)
 					.then(() => {
 						router.push('/genres');
 					})
@@ -105,7 +90,7 @@ const AddEditGenre = (props) => {
 	}
 
 	return (
-		<>
+		<div className='pageRoot'>
 			<BackButtonLink text='Back to Genres' onClick={handleCancel} />
 
 			<h1>{isAddMode ? 'Add Genre' : 'Edit Genre'}</h1>
@@ -142,8 +127,8 @@ const AddEditGenre = (props) => {
 				
 			</form>
 
-			<ConfirmModal text="Are you sure you want to cancel?" onClickYes={handleClickYes} />
-		</>
+			<ConfirmModal text="Are you sure you want to discard your changes?" onClickYes={handleClickYes} />
+		</div>
 	)
 }
 

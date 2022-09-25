@@ -1,14 +1,14 @@
 import React, {useState, useEffect } from 'react';
-import axios from 'axios';
 import Link from 'next/link';
 import Spinner from '../../components/Spinner';
 import GenreItem from '../../components/genres/GenreItem';
-import { apiUrl } from '../../../config.js';
+import getConfig from 'next/config';
 import { useRouter } from 'next/router';
 
-const API_URL = `${apiUrl}/genres/`;
+import { fetchWrapper } from '../../helpers/fetch-wrapper';
 
-console.log("apiUrl: ", apiUrl);
+const { publicRuntimeConfig } = getConfig();
+const API_URL = `${publicRuntimeConfig.apiUrl}/genres/`;
 
 const Genres = () => {
 	const [genres, setGenres] = useState([]);
@@ -17,8 +17,8 @@ const Genres = () => {
 
 	const getGenres = async () => {
 		try {
-			const genres = await axios.get(API_URL);
-			setGenres(genres.data);
+			const data = await fetchWrapper.get(`${API_URL}`);
+			setGenres(data)
 		}
 		catch (err) {
 			console.log(`Error: ${err}`)
@@ -26,9 +26,7 @@ const Genres = () => {
 	}
 
 	useEffect(() => {
-		(async () => {
-			getGenres();
-		})();
+		getGenres();
 	}, []);
 
 	const handleEdit = (event) => {
@@ -36,17 +34,17 @@ const Genres = () => {
 		router.push('/genres/edit/' + genreId);
 	};
 	
-	const handleDelete = (event) => {
+	const handleDelete = async (event, name) => {
 		const genreId = event.target.value;
-		const genreName = event.target.getAttribute("data-name");
-		if (confirm("Are you sure you want to delete the genre " + genreName + "?") == true) {
-			axios.delete(API_URL + genreId )
-			.then(() => {
+		if (confirm(`Are you sure you want to delete the genre ${name}?`)) {
+			try {
+				await fetchWrapper.delete(`${API_URL}/${genreId}`);
 				setDeleteSuccessful(true);
 				setGenres(genres => genres.filter(x => x.genreId != genreId));
-			}).catch(error => {
+			}
+			catch (err) {
 				console.log(error);
-		})
+			}
 		}
 	};
 	
@@ -67,7 +65,7 @@ const Genres = () => {
 			{genres.length == 0
 				? <Spinner />
 				: <div className="table-responsive me-5 mb-4">
-					<table className="table table-striped table-hover">
+					<table className="table table-striped table-hover border">
 						<thead>
 							<tr>
 								<th scope="col">ID</th>

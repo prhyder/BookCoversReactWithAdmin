@@ -9,9 +9,7 @@ const Layout = (({ children }) => {
 				<SideNav />
 				<div style={{ flex: 1 }} >
 					<NavBar/>
-					<div style={{marginTop: "20px", marginLeft: "35px"}}>
-						{children}
-					</div>
+					{children}
 				</div>
 			</div>
 		</>

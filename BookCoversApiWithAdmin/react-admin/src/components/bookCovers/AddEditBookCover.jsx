@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 import ButtonWithLoadingIndicator from '../ButtonWithLoadingIndicator';
 import BackButtonLink from '../BackButtonLink';
 import Image from 'next/image';
 import ConfirmModal from '../ConfirmModal';
 import { useFormik } from 'formik';
-import { apiUrl } from '../../../config.js';
+import getConfig from 'next/config';
 import * as yup from 'yup';
 import imagePaths from '../../imagePaths.json';
 
-const API_URL = `${apiUrl}/bookCovers/`;
+import { fetchWrapper } from '../../helpers/fetch-wrapper';
+
+const { publicRuntimeConfig } = getConfig();
+const API_URL = `${publicRuntimeConfig.apiUrl}/bookCovers/`;
+console.log(`api_url: ${API_URL}`);
 
 const AddEditBookCover = (props) => {
 	const router = useRouter();
@@ -28,21 +31,19 @@ const AddEditBookCover = (props) => {
 	}
 
 	const getBookCoverById = async () => {
-		try {
-			const url = API_URL + bookCoverId;
-			const bookCoverResponse = await axios.get(url);
-			setBookCover(bookCoverResponse.data);
+		try {			
+			const data = await fetchWrapper.get(`${API_URL}/${bookCoverId}`);
+			setBookCover(data);
 		}
 		catch (err) {
-			console.log(`Error: ${err}`)
+			console.log(`Error: ${err}`);
 		}
 	}
 
 	const getGenres = async () => {
 		try {
-			const genreApi = `${apiUrl}/genres`;
-			const genres = await axios.get(genreApi);
-			setGenres(genres.data);
+			const data = await fetchWrapper.get(`${publicRuntimeConfig.apiUrl}/genres`);
+			setGenres(data)
 		}
 		catch (err) {
 			console.log(`Error: ${err}`)
@@ -50,13 +51,11 @@ const AddEditBookCover = (props) => {
 	}
 
 	useEffect(() => {
-		(async () => {
-			getImagePaths();
-			getGenres();
-			if (!isAddMode) {
-				getBookCoverById();
-			}
-		})();
+		getImagePaths();
+		getGenres();
+		if (!isAddMode) {
+			getBookCoverById();
+		}
 	}, []);
 
 	const validationSchema = yup.object({
@@ -88,33 +87,19 @@ const AddEditBookCover = (props) => {
 			values.genreId = parseInt(values.genreId);
 
 			if (isAddMode) {
-				axios({
-					method: 'post',
-					url: API_URL,
-					data: values,
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				}).then(() => {
-					router.push('/bookCovers');
-				}).catch((error) => {
+				fetchWrapper.post(API_URL, values)
+					.then(() => {
+						router.push('/bookCovers');
+					}).catch((error) => {
 						console.log("Error: ", error);
 						setErrorText("There was an error when trying to create the book cover.");
 					});
 			}
 			else {
-				values.bookCoverId = parseInt(bookCoverId);
-
-				axios({
-					method: 'put',
-					url: API_URL,
-					data: values,
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				}).then(() => {
-					router.push('/bookCovers');
-				}).catch((error) => {
+				fetchWrapper.put(API_URL, values)
+					.then(() => {
+						router.push('/bookCovers');
+					}).catch((error) => {
 						console.log("Error: ", error);
 						setErrorText("There was an error when trying to update the book cover.");
 					});
@@ -140,7 +125,7 @@ const AddEditBookCover = (props) => {
 	}
 
 	return (
-		<>
+		<div className="pageRoot">
 			<BackButtonLink text='Back to Book Covers' onClick={handleCancel} />
 
 			<h1>{isAddMode ? 'Add Book Cover' : 'Edit Book Cover'}</h1>
@@ -252,9 +237,9 @@ const AddEditBookCover = (props) => {
 				
 			</form>
 
-			<ConfirmModal text="Are you sure you want to cancel?" onClickYes={handleClickYes} />
+			<ConfirmModal text="Are you sure you want to discard your changes?" onClickYes={handleClickYes} />
 
-		</>
+		</div>
 	)
 }
 

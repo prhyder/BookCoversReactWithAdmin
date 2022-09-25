@@ -14,6 +14,7 @@ body {
 a {
   color: $dark-primary-color;
   text-decoration: none;
+  cursor: pointer;
   &:hover,
   &:focus,
   &:active {
@@ -46,11 +47,11 @@ a.link-hover:hover {
 	margin-bottom: 16px;
 }
 
-.nav-link {
+#collapseSidenav .nav-link {
   color: white;
 }
 
 .pageRoot{
     margin-top: 40px;
-    margin-left: 20px;
+    margin-left: 40px;
 }

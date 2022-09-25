@@ -1,5 +1,7 @@
 export default function Home() {
 	return (
-      <p>Admin Homepage</p>
+		<div className="pageRoot">
+			<p>Admin Homepage</p>
+		</div>      
 	);
 }

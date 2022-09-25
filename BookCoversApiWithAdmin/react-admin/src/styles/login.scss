@@ -3,6 +3,7 @@
 	justify-content: center;
 	align-items: center;
 	padding-top: 100px;
+	height: 100%;
 }
 
 .loginForm {
@@ -35,9 +36,18 @@
 }
 
 .background {
-	background-image: url(../../public/images/stonesBackground.png);
+	background-image: url('../../public/images/outside_castle_hero.jpg');
 	height: 100%;
 	background-position: center;
 	background-repeat: no-repeat;
 	background-size: cover;
+	height: 100%;
+}
+
+.background-gradient{
+    background-attachment: fixed;
+	background-color: rgba(105, 105, 105, 0.3);
+	background: linear-gradient(0deg, rgba(0, 96, 141, 0.425) 0%, rgba(31, 209, 233, 0.418) 50%);  
+	height: 100%;
+	width: 100%;
 }

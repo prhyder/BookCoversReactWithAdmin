@@ -29,11 +29,10 @@ export default function BookCoverItem({bookCover, onClickEdit, onClickDelete}) {
 					Edit
 				</button>
 				<button
-					data-title={title}
 					value={bookCoverId}
 					type="button"
 					className="btn btn-dark d-inline"
-					onClick={onClickDelete}
+					onClick={(event) => { onClickDelete(event, title) }}
 				>
 					Delete
 				</button>
