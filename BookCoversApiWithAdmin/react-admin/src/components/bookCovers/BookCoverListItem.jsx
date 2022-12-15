@@ -1,16 +1,12 @@
 import Image from 'next/image';
 
-export default function BookCoverItem({bookCover, onClickEdit, onClickDelete, provided, innerRef}) {
+export default function BookCoverItem({bookCover, onClickEdit, onClickDelete}) {
 	const { imageUrl, bookCoverId, title, authorName, genreName } = bookCover;
 
 	return (
-		<tr className="align-middle"
-			key={bookCoverId}
-			ref={provided.innerRef}
-			{...provided.draggableProps}
-			{...provided.dragHandleProps}
-		>
-			<td>
+		// <li className="align-middle">
+		<>
+			<div>
 				{imageUrl
 							&& <Image
 								src={imageUrl}
@@ -19,12 +15,12 @@ export default function BookCoverItem({bookCover, onClickEdit, onClickDelete, pr
 								key={bookCoverId}
 							/>
 				}
-			</td>
-			<td>{bookCoverId}</td>
-			<td>{title}</td>
-			<td>{authorName}</td>
-			<td>{genreName}</td>
-			<td>
+			</div>
+			<div>{bookCoverId}</div>
+			<div>{title}</div>
+			<div>{authorName}</div>
+			<div>{genreName}</div>
+			<div>
 				<button
 					value={bookCoverId}
 					type="button"
@@ -41,7 +37,8 @@ export default function BookCoverItem({bookCover, onClickEdit, onClickDelete, pr
 				>
 					Delete
 				</button>
-			</td>
-		</tr>	
+			</div>
+			</>
+		// </li>	
 	);
 }

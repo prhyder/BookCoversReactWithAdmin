@@ -1,4 +1,4 @@
-export default ({text, onClickYes}) => {
+const ConfirmModal = ({text, onClickYes}) => {
 	return (
 		<>
 			{/* Hidden button that triggers the modal. */}
@@ -32,3 +32,5 @@ export default ({text, onClickYes}) => {
 		
 	);
 }
+
+export default ConfirmModal;

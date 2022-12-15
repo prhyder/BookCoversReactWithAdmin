@@ -8,11 +8,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using BookCoversApi.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 
 namespace BookCoversApi.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
     [ApiController]
     public class BookCoversController : ControllerBase
     {

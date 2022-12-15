@@ -2,8 +2,10 @@ import React, {useState, useEffect } from 'react';
 import Link from 'next/link';
 import Spinner from '../../components/Spinner';
 import BookCoverItem from '../../components/bookCovers/BookCoverItem';
+import BookCoverListItem from '../../components/bookCovers/BookCoverListItem';
 import getConfig from 'next/config';
 import { useRouter } from 'next/router';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import { fetchWrapper } from '../../helpers/fetch-wrapper';
 
@@ -75,13 +77,56 @@ const BookCovers = () => {
 							<th scope="col">Genre</th>
 							<th scope="col"></th>
 						</tr>
-					</thead>
-					<tbody>
-							{bookCovers.map((bookCover) => (
-								<BookCoverItem key={bookCover.bookCoverId} bookCover={bookCover} onClickEdit={handleEdit} onClickDelete={handleDelete} />
-							))}
-					</tbody>
-				</table>
+						</thead>
+
+					
+					
+
+					{/* <li ref={provided.innerRef}
+													{...provided.draggableProps}
+													{...provided.dragHandleProps}> */}
+														{/* <p>{bookCover.title}</p> */}
+														{/* <BookCoverListItem
+															bookCover={bookCover}
+															onClickEdit={handleEdit}
+															onClickDelete={handleDelete} /> */}
+
+					<DragDropContext>
+						<Droppable droppableId="bookCoverId">
+							{/* <tbody>
+								{bookCovers.map((bookCover) => (
+									<BookCoverItem key={bookCover.bookCoverId} bookCover={bookCover} onClickEdit={handleEdit} onClickDelete={handleDelete} />
+								))}
+							</tbody> */}
+							
+
+							{(provided) => (
+								<tbody {...provided.droppableProps} ref={provided.innerRef}>
+									{bookCovers.map((bookCover, index) => {
+										return (
+											<Draggable key={bookCover.bookCoverId} draggableId={String(bookCover.bookCoverId)} index={index}>
+												{(provided) => (
+													<BookCoverItem
+													provided={provided}
+														// ref={provided.innerRef}
+														// {...provided.draggableProps}
+														// {...provided.dragHandleProps}
+														bookCover={bookCover}
+														onClickEdit={handleEdit}
+														onClickDelete={handleDelete} />																								
+													
+												)}
+											</Draggable>
+										)
+										
+										
+									})}
+								</tbody>
+							)}
+							</Droppable>
+						</DragDropContext>
+
+						</table>
 				</div>
 			}
 		</div>

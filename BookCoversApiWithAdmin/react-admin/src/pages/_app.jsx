@@ -13,21 +13,21 @@ export default function MyApp({ Component, pageProps }) {
 	useEffect(() => { 
 		require("bootstrap/dist/js/bootstrap.bundle.min.js");
 
-		// Run auth check on initial load
-		authCheck(router.asPath);
+		// // Run auth check on initial load
+		// authCheck(router.asPath);
 
-		// Set authorized to false to hide page content while changing routes
-		const hideContent = () => setAuthorized(false);
-		router.events.on('routeChangeStart', hideContent);
+		// // Set authorized to false to hide page content while changing routes
+		// const hideContent = () => setAuthorized(false);
+		// router.events.on('routeChangeStart', hideContent);
 
-		// Run auth check on route change
-		router.events.on('routeChangeStart', authCheck);
+		// // Run auth check on route change
+		// router.events.on('routeChangeStart', authCheck);
 
-		// Unsubscribe from events in useEffect return function
-		return () => {
-			router.events.off('routeChangeStart', hideContent);
-			router.events.off('routeChangeComplete', authCheck);
-		}
+		// // Unsubscribe from events in useEffect return function
+		// return () => {
+		// 	router.events.off('routeChangeStart', hideContent);
+		// 	router.events.off('routeChangeComplete', authCheck);
+		// }
 	}, []);
 
 	function authCheck(url) {
@@ -52,9 +52,9 @@ export default function MyApp({ Component, pageProps }) {
 				<meta name="viewport" content="initial-scale=1, width=device-width" />
 			</Head>
 			<Layout>
-				{authorized &&
+				{/* {authorized && */}
 					<Component {...pageProps} />
-				}
+				{/* } */}
 			</Layout>
 		</>	
 	);

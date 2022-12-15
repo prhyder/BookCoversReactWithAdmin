@@ -19,33 +19,36 @@ export default function SideNav() {
 
 	return (
 		<div id="collapseSidenav" className="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style={{ width: "270px" }}>
-			<a href="/" className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-				<svg className="bi me-2" width="40" height="32"></svg>
-				<div style={{ display: "flex", alignItems: "center" }}>
-					<Image src={Logo}
-						width={26}
-						height={40}
-						layout="fixed"
-					/>
-					<span className="fs-5 mx-1">
-						Elemental
-					</span>
-					{/* <a class="btn" data-bs-toggle="collapse" href="#collapseSidenav">
-							X
-						</a> */}
-				</div>
-
-			</a>
+			<Link href="/" className="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+				<>
+					<svg className="bi me-2" width="40" height="32"></svg>
+					<div style={{ display: "flex", alignItems: "center" }}>
+						<Image src={Logo}
+							width={26}
+							height={40}
+							layout="fixed"
+						/>
+						<span className="fs-5 mx-1">
+							Elemental
+						</span>
+						{/* <a class="btn" data-bs-toggle="collapse" href="#collapseSidenav">
+								X
+							</a> */}
+					</div>
+				</>
+			</Link>
 			<hr />
 			<ul className="nav nav-pills flex-column mb-auto">
 				{navItems.map((navItem, index) => (
 					<Link href={navItem.path} key={index}>
-						<li key={navItem.name} className="nav-item">
-							<a href={navItem.path} className={`nav-link ${activeRoute(navItem.path, router.pathname) ? 'active' : ''}`} aria-current="page">
-								<svg className="bi me-2" width="16" height="16"></svg>
-								{navItem.name}
-							</a>
-						</li>
+						<>
+							<li key={navItem.name} className="nav-item">
+								<a href={navItem.path} className={`nav-link ${activeRoute(navItem.path, router.pathname) ? 'active' : ''}`} aria-current="page">
+									<svg className="bi me-2" width="16" height="16"></svg>
+									{navItem.name}
+								</a>
+							</li>
+						</>
 					</Link>
 				))}
 			</ul>
